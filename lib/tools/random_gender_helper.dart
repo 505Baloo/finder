@@ -1,5 +1,5 @@
 import 'package:finder/enums/gender.dart';
-import 'package:finder/tools/random_number.dart';
+import 'package:finder/tools/random_number_helper.dart';
 
 Gender generateRandomGender() {
   int outcomeNumber = generateRandomNumberExcludingZero(2);

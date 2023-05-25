@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:finder/models/bachelor.dart';
 import 'package:finder/tools/fake_bachelors.dart';
-import 'package:finder/tools/search_for_manager.dart';
+import 'package:finder/tools/search_for_helper.dart';
+import 'package:finder/screens/bachelor_preview.dart';
 
-class Index extends StatefulWidget {
-  const Index({super.key});
+class BachelorMain extends StatefulWidget {
+  const BachelorMain({super.key});
 
   @override
-  State<Index> createState() => _IndexState();
+  State<BachelorMain> createState() => _BachelorMainState();
 }
 
-class _IndexState extends State<Index> {
+class _BachelorMainState extends State<BachelorMain> {
   void _display() {
     setState(() {});
   }
@@ -27,9 +28,15 @@ class _IndexState extends State<Index> {
             backgroundImage: AssetImage(bachelor.avatar),
           ),
           title: Text('${bachelor.firstName} ${bachelor.lastName}'),
-          subtitle: Text('${bachelor.job}'),
-          trailing: Text(parseSearchingForToString(bachelor.searchFor)),
+          // subtitle: Text('${bachelor.job}'),
+          subtitle: Text(parseSearchingForToString(bachelor.searchFor)),
           visualDensity: const VisualDensity(horizontal: -3),
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => BachelorPreview(
+                      bachelor: bachelor,
+                    )));
+          },
         );
       },
     );
@@ -44,7 +51,7 @@ class _IndexState extends State<Index> {
       ),
       body: Center(
         child: SizedBox(
-          width: 700,
+          width: 400,
           child: generateBachelorsListView(),
         ),
       ),

@@ -1,8 +1,8 @@
 import 'package:faker/faker.dart';
 import 'package:finder/models/bachelor.dart';
 import 'package:finder/enums/gender.dart';
-import 'package:finder/tools/random_number.dart';
-import 'package:finder/tools/search_for_manager.dart';
+import 'package:finder/tools/random_number_helper.dart';
+import 'package:finder/tools/search_for_helper.dart';
 
 List<Bachelor> generateRandomBachelors() {
   List<String> maleNames = [

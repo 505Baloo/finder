@@ -21,6 +21,7 @@ List<Gender> randomizeSearchFor() {
   return searchingFor;
 }
 
+// Voir extensions ou join
 String parseSearchingForToString(List<Gender>? searchingFor) {
   List<String> searchingForToString = List.empty(growable: true);
   String toReturn = "Searching for ";

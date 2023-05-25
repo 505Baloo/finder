@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:finder/screens/index.dart';
+import 'package:finder/screens/bachelor_main.dart';
 
 void main() {
   runApp(const FinderApp());
@@ -11,7 +11,7 @@ class FinderApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const Index(),
+      home: const BachelorMain(),
       title: 'Finder',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
