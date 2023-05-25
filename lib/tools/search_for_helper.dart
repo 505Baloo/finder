@@ -1,5 +1,5 @@
 import 'package:finder/enums/gender.dart';
-import 'package:finder/tools/random_number.dart';
+import 'package:finder/tools/random_number_helper.dart';
 
 List<Gender> randomizeSearchFor() {
   List<Gender> searchingFor = List.empty(growable: true);
