@@ -3,6 +3,7 @@ import 'package:finder/models/bachelor.dart';
 import 'package:finder/tools/fake_bachelors.dart';
 import 'package:finder/tools/search_for_helper.dart';
 import 'package:finder/screens/bachelor_details.dart';
+import 'package:go_router/go_router.dart';
 
 class BachelorMain extends StatefulWidget {
   const BachelorMain({super.key});
@@ -28,6 +29,9 @@ class _BachelorMainState extends State<BachelorMain> {
         itemBuilder: (BuildContext context, int index) {
           Bachelor bachelor = _bachelors[index];
           return ListTile(
+            // hoverColor: bachelor.gender == Gender.male
+            //     ? Colors.blue.shade100
+            //     : Colors.red.shade100,
             leading: CircleAvatar(
               backgroundImage: AssetImage(bachelor.avatar),
             ),
@@ -37,7 +41,7 @@ class _BachelorMainState extends State<BachelorMain> {
             visualDensity: const VisualDensity(horizontal: -2),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => BachelorPreview(
+                  builder: (_) => BachelorDetails(
                         bachelor: bachelor,
                       )));
             },
@@ -52,15 +56,11 @@ class _BachelorMainState extends State<BachelorMain> {
         backgroundColor: Colors.redAccent,
       ),
       body: Center(
-        child: SizedBox(
-          width: 400,
+        child: ConstrainedBox(
+          constraints:
+              BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
           child: buildBachelorsListView(),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
-        tooltip: 'Search!',
-        child: const Icon(Icons.person_search_rounded),
       ),
     );
   }
