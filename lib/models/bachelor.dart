@@ -8,6 +8,7 @@ class Bachelor {
   final List<Gender>? searchFor;
   final String? job;
   final String? description;
+  bool isLiked;
 
   Bachelor(
       {required this.firstName,
@@ -16,5 +17,6 @@ class Bachelor {
       required this.avatar,
       this.searchFor,
       this.job,
-      this.description});
+      this.description,
+      this.isLiked = false});
 }

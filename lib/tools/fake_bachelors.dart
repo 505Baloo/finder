@@ -53,7 +53,9 @@ List<Bachelor> generateRandomBachelors() {
         avatar: i % 2 == 0
             ? "assets/images/man-${generateRandomNumberExcludingZero(15)}.png"
             : "assets/images/woman-${generateRandomNumberExcludingZero(15)}.png",
-        job: faker.job.title(),
+        job: generateRandomNumberExcludingZero(2) % 2 == 0
+            ? faker.job.title()
+            : null,
         searchFor: randomizeSearchFor()));
   }
 
