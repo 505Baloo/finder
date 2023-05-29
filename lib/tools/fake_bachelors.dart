@@ -45,6 +45,7 @@ List<Bachelor> generateRandomBachelors() {
 
   for (int i = 0; i <= 30; i++) {
     listOfBachelors.add(Bachelor(
+        id: i,
         firstName: i % 2 == 0
             ? maleNames[generateRandomNumber(maleNames.length)]
             : femaleNames[generateRandomNumber(femaleNames.length)],

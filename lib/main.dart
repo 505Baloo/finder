@@ -10,32 +10,34 @@ void main() {
       create: (context) => BachelorProvider(), child: const FinderApp()));
 }
 
-// final GoRouter _router = GoRouter(
-//   routes: <RouteBase>[
-//     GoRoute(
-//       path: '/',
-//       builder: (BuildContext context, GoRouterState state) {
-//         return const BachelorMain();
-//       },
-//       routes: <RouteBase>[
-//         GoRoute(
-//           path: 'details',
-//           builder: (BuildContext context, GoRouterState state) {
-//             return const BachelorDetails();
-//           },
-//         ),
-//       ],
-//     ),
-//   ],
-// );
+final GoRouter _router = GoRouter(
+  routes: [
+    GoRoute(
+      name: 'main',
+      path: '/',
+      builder: (BuildContext context, GoRouterState state) {
+        return const BachelorMain();
+      },
+      routes: [
+        GoRoute(
+          name: 'details',
+          path: 'details/:id',
+          builder: (BuildContext context, GoRouterState state) {
+            return BachelorDetails(id: int.parse(state.pathParameters['id']!));
+          },
+        ),
+      ],
+    ),
+  ],
+);
 
 class FinderApp extends StatelessWidget {
   const FinderApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const BachelorMain(),
+    return MaterialApp.router(
+      routerConfig: _router,
       title: 'Finder',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

@@ -1,104 +1,103 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:finder/providers/bachelor_provider.dart';
 import 'package:finder/models/bachelor.dart';
 import 'package:finder/tools/search_for_helper.dart';
+import 'package:go_router/go_router.dart';
 import 'package:finder/enums/gender.dart';
 
 class BachelorDetails extends StatefulWidget {
-  const BachelorDetails({super.key, required this.bachelor});
-  final Bachelor bachelor;
-
+  const BachelorDetails({Key? key, required this.id}) : super(key: key);
+  final int id;
   @override
-  State<BachelorDetails> createState() => _BachelorDetailsState();
+  BachelorDetailsState createState() => BachelorDetailsState();
 }
 
-class _BachelorDetailsState extends State<BachelorDetails> {
-  late Bachelor bachelor;
-  late double screenWidth = MediaQuery.of(context).size.width;
-
-  @override
-  void initState() {
-    bachelor = widget.bachelor;
-    super.initState();
-  }
-
-  void _toggleLike() {
+class BachelorDetailsState extends State<BachelorDetails> {
+  late double screenWidth;
+  void _toggleLike(Bachelor bachelor) {
     setState(() {
       bachelor.isLiked = !bachelor.isLiked;
 
       if (bachelor.isLiked) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-            "You liked ${bachelor.firstName.toString()}'s profile! ",
-            style: TextStyle(
-              fontFamily: "Poppins",
-              fontSize: screenWidth * 0.01,
-              fontWeight: FontWeight.bold,
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              "You liked ${bachelor.firstName}'s profile!",
+              style: TextStyle(
+                fontFamily: "Poppins",
+                fontSize: screenWidth * 0.01,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
+            duration: const Duration(seconds: 2),
+            backgroundColor: Colors.red.shade600,
           ),
-          duration: const Duration(
-            seconds: 2,
-          ),
-          backgroundColor: Colors.red.shade600,
-        ));
+        );
       }
     });
   }
 
-  Widget buildBachelorDetailsCard() {
+  Widget buildBachelorDetailsCard(Bachelor bachelor) {
     return Card(
       color: bachelor.gender == Gender.male
           ? Colors.blue.shade100
           : Colors.pink.shade100,
       elevation: 4,
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Container(
-          padding: const EdgeInsets.all(25),
-          constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.45),
-          child: ListTile(
-            title: Text(
-              "${bachelor.firstName} ${bachelor.lastName}",
-              style: TextStyle(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(25),
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.45,
+            ),
+            child: ListTile(
+              title: Text(
+                "${bachelor.firstName} ${bachelor.lastName}",
+                style: TextStyle(
                   color: bachelor.gender == Gender.male
                       ? Colors.blue
                       : Colors.pinkAccent,
                   fontFamily: "Poppins",
                   fontWeight: FontWeight.bold,
-                  fontSize: screenWidth * 0.02),
-            ),
-            subtitle: Text(
-              bachelor.job != null ? bachelor.job.toString() : "",
-              style: TextStyle(
-                fontFamily: "Poppins",
-                fontSize: screenWidth * 0.02,
+                  fontSize: screenWidth * 0.02,
+                ),
+              ),
+              subtitle: Text(
+                bachelor.job != null ? bachelor.job.toString() : "",
+                style: TextStyle(
+                  fontFamily: "Poppins",
+                  fontSize: screenWidth * 0.02,
+                ),
               ),
             ),
           ),
-        ),
-        Stack(
-          alignment: AlignmentDirectional.center,
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.3,
-              child: Image.asset(
-                bachelor.avatar,
-                fit: BoxFit.cover,
+          Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.3,
+                child: Image.asset(
+                  bachelor.avatar,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            Opacity(
+              Opacity(
                 opacity: bachelor.isLiked ? 0.5 : 0.2,
                 child: GestureDetector(
-                  onDoubleTap: _toggleLike,
+                  onDoubleTap: () => _toggleLike(bachelor),
                   child: Icon(
                     Icons.favorite,
                     color: bachelor.isLiked ? Colors.red : Colors.white,
                     size: 250,
                   ),
-                )),
-          ],
-        ),
-        Container(
+                ),
+              ),
+            ],
+          ),
+          Container(
             padding: const EdgeInsets.only(top: 15),
             child: Text(
               parseSearchingForToString(bachelor.searchFor),
@@ -106,37 +105,50 @@ class _BachelorDetailsState extends State<BachelorDetails> {
                 fontFamily: "Poppins",
                 fontSize: screenWidth * 0.02,
               ),
-            ))
-      ]),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final bachelorProvider = Provider.of<BachelorProvider>(context);
+    final bachelor = bachelorProvider.selectedBachelor;
+    screenWidth = MediaQuery.of(context).size.width;
+
+    if (bachelor == null) {
+      return Container();
+    }
+
     return Scaffold(
-        appBar: AppBar(
-          title: Text("${bachelor.firstName.toString()} Details"),
-        ),
-        body: Center(
-            child: Column(
+      appBar: AppBar(
+        title: Text("${bachelor.firstName} Details"),
+      ),
+      body: Center(
+        child: Column(
           children: [
-            buildBachelorDetailsCard(),
+            buildBachelorDetailsCard(bachelor),
             ButtonBar(
               alignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                    onPressed: _toggleLike,
-                    icon: Icon(Icons.favorite,
-                        color: bachelor.isLiked ? Colors.red : Colors.grey)),
+                  onPressed: () => _toggleLike(bachelor),
+                  icon: Icon(
+                    Icons.favorite,
+                    color: bachelor.isLiked ? Colors.red : Colors.grey,
+                  ),
+                ),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                  onPressed: () => context.go('/'),
                   child: const Text("Return"),
-                )
+                ),
               ],
-            )
+            ),
           ],
-        )));
+        ),
+      ),
+    );
   }
 }
