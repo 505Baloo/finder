@@ -1,4 +1,5 @@
 import 'package:finder/providers/bachelor_provider.dart';
+import 'package:finder/screens/bachelor_likes.dart';
 import 'package:finder/screens/bachelor_details.dart';
 import 'package:flutter/material.dart';
 import 'package:finder/screens/bachelor_main.dart';
@@ -6,8 +7,12 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-      create: (context) => BachelorProvider(), child: const FinderApp()));
+  runApp(
+    ChangeNotifierProvider<BachelorProvider>(
+      create: (context) => BachelorProvider(),
+      child: const FinderApp(),
+    ),
+  );
 }
 // TODO : MultiProvider
 
@@ -27,6 +32,12 @@ final GoRouter _router = GoRouter(
             return BachelorDetails(id: int.parse(state.pathParameters['id']!));
           },
         ),
+        GoRoute(
+            name: 'likes',
+            path: 'likes',
+            builder: (BuildContext context, GoRouterState state) {
+              return const BachelorLikes();
+            })
       ],
     ),
   ],
@@ -38,6 +49,7 @@ class FinderApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       routerConfig: _router,
       title: 'Finder',
       theme: ThemeData(

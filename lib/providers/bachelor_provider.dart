@@ -2,21 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:finder/models/bachelor.dart';
 
 class BachelorProvider extends ChangeNotifier {
-  final List<Bachelor> _listOfLikedBachelors = [];
+  List<Bachelor> _listOfLikedBachelors = [];
   List<Bachelor> _bachelors = [];
   Bachelor? _selectedBachelor;
 
   Bachelor? get selectedBachelor => _selectedBachelor;
+
+  List<Bachelor> get listOfLikedBachelors => _listOfLikedBachelors;
+
+  List<Bachelor> get bachelors => _bachelors;
 
   void selectBachelor(Bachelor bachelor) {
     _selectedBachelor = bachelor;
     notifyListeners();
   }
 
-  List<Bachelor> get listOfLikedBachelors =>
-      List.unmodifiable(_listOfLikedBachelors);
+  void applyLike(Bachelor bachelor) {
+    bachelor.isLiked = !bachelor.isLiked;
+    notifyListeners();
+  }
 
-  List<Bachelor> get bachelors => _bachelors;
+  void setLikes(List<Bachelor> likedBachelors) {
+    _listOfLikedBachelors = likedBachelors;
+    notifyListeners();
+  }
 
   void setBachelors(List<Bachelor> bachelors) {
     _bachelors = bachelors;
@@ -31,8 +40,15 @@ class BachelorProvider extends ChangeNotifier {
   }
 
   void remove(Bachelor toRemoveBachelor) {
-    _listOfLikedBachelors.removeWhere(
-        (element) => element.firstName == toRemoveBachelor.firstName);
+    _listOfLikedBachelors.removeWhere((element) =>
+        element.firstName == toRemoveBachelor.firstName &&
+        element.lastName == toRemoveBachelor.lastName);
     notifyListeners();
   }
+
+  // TODO : access bachelor through id
+  // Bachelor? read(int id) {
+  //   return _bachelors.firstWhere((element) => element.id == id,
+  //       orElse: () => null);
+  // }
 }

@@ -17,28 +17,30 @@ class BachelorDetailsState extends State<BachelorDetails> {
   late double screenWidth;
   late double textScaleFactor;
   late double fontSize;
-  void _toggleLike(Bachelor bachelor) {
-    setState(() {
-      bachelor.isLiked = !bachelor.isLiked;
+  late BachelorProvider bachelorProvider;
 
-      if (bachelor.isLiked) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              "You liked ${bachelor.firstName}'s profile!",
-              style: TextStyle(
-                fontFamily: "Poppins",
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
+  void _toggleLike(Bachelor bachelor) {
+    bachelorProvider.applyLike(bachelor);
+    if (bachelor.isLiked) {
+      bachelorProvider.listOfLikedBachelors.add(bachelor);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "You liked ${bachelor.firstName}'s profile!",
+            style: TextStyle(
+              fontFamily: "Poppins",
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
             ),
-            duration: const Duration(seconds: 2),
-            backgroundColor: Colors.red.shade600,
+            textAlign: TextAlign.center,
           ),
-        );
-      }
-    });
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.red.shade600,
+        ),
+      );
+    } else {
+      bachelorProvider.listOfLikedBachelors.remove(bachelor);
+    }
   }
 
   Widget buildBachelorDetailsCard(Bachelor bachelor) {
@@ -87,7 +89,7 @@ class BachelorDetailsState extends State<BachelorDetails> {
                 ),
               ),
               Opacity(
-                opacity: bachelor.isLiked ? 0.5 : 0.2,
+                opacity: bachelor.isLiked ? 0.6 : 0.2,
                 child: GestureDetector(
                   onDoubleTap: () => _toggleLike(bachelor),
                   child: Icon(
@@ -116,8 +118,9 @@ class BachelorDetailsState extends State<BachelorDetails> {
 
   @override
   Widget build(BuildContext context) {
-    final bachelorProvider = Provider.of<BachelorProvider>(context);
+    bachelorProvider = Provider.of<BachelorProvider>(context);
     final bachelor = bachelorProvider.selectedBachelor;
+
     screenWidth = MediaQuery.of(context).size.width;
     textScaleFactor = MediaQuery.of(context).textScaleFactor;
     fontSize = 16 * textScaleFactor;
@@ -145,7 +148,7 @@ class BachelorDetailsState extends State<BachelorDetails> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () => context.go('/'),
+                  onPressed: () => GoRouter.of(context).go('/'),
                   child: const Text("Return"),
                 ),
               ],

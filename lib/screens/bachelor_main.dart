@@ -14,14 +14,13 @@ class BachelorMain extends StatefulWidget {
 }
 
 class _BachelorMainState extends State<BachelorMain> {
-  // late List<Bachelor> _bachelors;
-
   @override
   void initState() {
-    // _bachelors = generateRandomBachelors();
     super.initState();
     Provider.of<BachelorProvider>(context, listen: false)
         .setBachelors(generateRandomBachelors());
+    Provider.of<BachelorProvider>(context, listen: false)
+        .setLikes(List.empty(growable: true));
   }
 
   @override
@@ -41,11 +40,21 @@ class _BachelorMainState extends State<BachelorMain> {
                 ),
                 title: Text(bachelor.firstName),
                 subtitle: Text(parseSearchingForToString(bachelor.searchFor)),
+                trailing:
+                    bachelorProvider.listOfLikedBachelors.contains(bachelor)
+                        ? const Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                          )
+                        : const Icon(Icons.heart_broken),
                 visualDensity: const VisualDensity(horizontal: -2),
+                tileColor:
+                    bachelorProvider.listOfLikedBachelors.contains(bachelor)
+                        ? Colors.pink[200]
+                        : Colors.white,
                 onTap: () {
                   final selectedBachelor = bachelors[index];
-                  Provider.of<BachelorProvider>(context, listen: false)
-                      .selectBachelor(selectedBachelor);
+                  bachelorProvider.selectBachelor(selectedBachelor);
                   GoRouter.of(context).go('/details/${selectedBachelor.id}');
                 },
               );
@@ -59,6 +68,16 @@ class _BachelorMainState extends State<BachelorMain> {
       appBar: AppBar(
         title: const Text("Finder"),
         backgroundColor: Colors.redAccent,
+        actions: [
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: InkWell(
+                onTap: () {
+                  GoRouter.of(context).go('/likes');
+                },
+                child: const Icon(Icons.shopping_cart),
+              ))
+        ],
       ),
       body: Center(
         child: ConstrainedBox(
