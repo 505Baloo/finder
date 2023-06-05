@@ -9,6 +9,7 @@ void main() {
   runApp(ChangeNotifierProvider(
       create: (context) => BachelorProvider(), child: const FinderApp()));
 }
+// TODO : MultiProvider
 
 final GoRouter _router = GoRouter(
   routes: [

@@ -15,6 +15,8 @@ class BachelorDetails extends StatefulWidget {
 
 class BachelorDetailsState extends State<BachelorDetails> {
   late double screenWidth;
+  late double textScaleFactor;
+  late double fontSize;
   void _toggleLike(Bachelor bachelor) {
     setState(() {
       bachelor.isLiked = !bachelor.isLiked;
@@ -26,7 +28,7 @@ class BachelorDetailsState extends State<BachelorDetails> {
               "You liked ${bachelor.firstName}'s profile!",
               style: TextStyle(
                 fontFamily: "Poppins",
-                fontSize: screenWidth * 0.01,
+                fontSize: fontSize,
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
@@ -51,7 +53,7 @@ class BachelorDetailsState extends State<BachelorDetails> {
           Container(
             padding: const EdgeInsets.all(25),
             constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.45,
+              maxWidth: MediaQuery.of(context).size.width * 0.7,
             ),
             child: ListTile(
               title: Text(
@@ -62,14 +64,14 @@ class BachelorDetailsState extends State<BachelorDetails> {
                       : Colors.pinkAccent,
                   fontFamily: "Poppins",
                   fontWeight: FontWeight.bold,
-                  fontSize: screenWidth * 0.02,
+                  fontSize: 18 * textScaleFactor,
                 ),
               ),
               subtitle: Text(
                 bachelor.job != null ? bachelor.job.toString() : "",
                 style: TextStyle(
                   fontFamily: "Poppins",
-                  fontSize: screenWidth * 0.02,
+                  fontSize: fontSize,
                 ),
               ),
             ),
@@ -98,12 +100,12 @@ class BachelorDetailsState extends State<BachelorDetails> {
             ],
           ),
           Container(
-            padding: const EdgeInsets.only(top: 15),
+            padding: const EdgeInsets.only(top: 15, bottom: 15),
             child: Text(
               parseSearchingForToString(bachelor.searchFor),
               style: TextStyle(
                 fontFamily: "Poppins",
-                fontSize: screenWidth * 0.02,
+                fontSize: fontSize,
               ),
             ),
           ),
@@ -117,6 +119,8 @@ class BachelorDetailsState extends State<BachelorDetails> {
     final bachelorProvider = Provider.of<BachelorProvider>(context);
     final bachelor = bachelorProvider.selectedBachelor;
     screenWidth = MediaQuery.of(context).size.width;
+    textScaleFactor = MediaQuery.of(context).textScaleFactor;
+    fontSize = 16 * textScaleFactor;
 
     if (bachelor == null) {
       return Container();
