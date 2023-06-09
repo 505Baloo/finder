@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:finder/models/bachelor.dart';
 import 'package:finder/tools/fake_bachelors.dart';
