@@ -1,16 +1,29 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:finder/models/bachelor.dart';
+import 'package:finder/tools/fake_bachelors.dart';
 
 class BachelorProvider extends ChangeNotifier {
-  List<Bachelor> _listOfLikedBachelors = [];
   List<Bachelor> _bachelors = [];
+  List<Bachelor> _listOfLikedBachelors = [];
 
   List<Bachelor> get listOfLikedBachelors => _listOfLikedBachelors;
-
   List<Bachelor> get bachelors => _bachelors;
+
+  BachelorProvider() {
+    _bachelors = generateRandomBachelors();
+    _listOfLikedBachelors = [];
+  }
 
   void applyLike(Bachelor bachelor) {
     bachelor.isLiked = !bachelor.isLiked;
+    notifyListeners();
+  }
+
+  void applyDislike(Bachelor bachelor) {
+    bachelor.isDisliked = true;
+    _bachelors.removeWhere((b) => b.id == bachelor.id);
     notifyListeners();
   }
 

@@ -10,6 +10,7 @@ class Bachelor {
   final String? job;
   final String? description;
   bool isLiked;
+  bool isDisliked;
 
   Bachelor(
       {required this.id,
@@ -20,5 +21,6 @@ class Bachelor {
       this.searchFor,
       this.job,
       this.description,
-      this.isLiked = false});
+      this.isLiked = false,
+      this.isDisliked = false});
 }

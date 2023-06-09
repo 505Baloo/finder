@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:finder/models/bachelor.dart';
-import 'package:finder/tools/fake_bachelors.dart';
 import 'package:finder/tools/search_for_helper.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:finder/providers/bachelor_provider.dart';
 
 class BachelorMain extends StatefulWidget {
-  const BachelorMain({super.key});
+  const BachelorMain({Key? key}) : super(key: key);
 
   @override
   State<BachelorMain> createState() => _BachelorMainState();
@@ -21,10 +20,10 @@ class _BachelorMainState extends State<BachelorMain> {
   @override
   void initState() {
     super.initState();
-    Provider.of<BachelorProvider>(context, listen: false)
-        .setBachelors(generateRandomBachelors());
-    Provider.of<BachelorProvider>(context, listen: false)
-        .setLikes(List.empty(growable: true));
+  }
+
+  void _toggleDislike(Bachelor bachelor) {
+    bachelorProvider.applyDislike(bachelor);
   }
 
   void _toggleLike(Bachelor bachelor) {
@@ -60,11 +59,13 @@ class _BachelorMainState extends State<BachelorMain> {
     Widget buildBachelorsListView() {
       return Consumer<BachelorProvider>(
         builder: (context, bachelorProvider, _) {
-          final bachelors = bachelorProvider.bachelors;
+          final bachelors = bachelorProvider.bachelors
+              .where((element) => !element.isDisliked)
+              .toList();
           return ListView.builder(
             itemCount: bachelors.length,
             itemBuilder: (BuildContext context, int index) {
-              final bachelor = bachelorProvider.getById(index);
+              final bachelor = bachelors[index];
               return ListTile(
                 leading: CircleAvatar(
                   backgroundImage: AssetImage(bachelor.avatar),
@@ -81,6 +82,7 @@ class _BachelorMainState extends State<BachelorMain> {
                           : const Opacity(
                               opacity: 0.5, child: Icon(Icons.heart_broken)),
                   onTap: () => _toggleLike(bachelor),
+                  onLongPressUp: () => _toggleDislike(bachelor),
                 ),
                 visualDensity: const VisualDensity(horizontal: -2),
                 tileColor:

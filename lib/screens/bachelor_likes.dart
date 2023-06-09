@@ -31,6 +31,8 @@ class BachelorLikes extends StatelessWidget {
                     GoRouter.of(context).go(
                         '/details/${bachelorProvider.listOfLikedBachelors[index].id}');
                   },
+                  onLongPress: () => bachelorProvider
+                      .remove(bachelorProvider.listOfLikedBachelors[index]),
                 ))),
       );
     });
