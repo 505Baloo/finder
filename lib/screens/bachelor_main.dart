@@ -14,6 +14,10 @@ class BachelorMain extends StatefulWidget {
 }
 
 class _BachelorMainState extends State<BachelorMain> {
+  late BachelorProvider bachelorProvider;
+  late double textScaleFactor;
+  late double fontSize;
+
   @override
   void initState() {
     super.initState();
@@ -23,39 +27,68 @@ class _BachelorMainState extends State<BachelorMain> {
         .setLikes(List.empty(growable: true));
   }
 
+  void _toggleLike(Bachelor bachelor) {
+    bachelorProvider.applyLike(bachelor);
+    if (bachelor.isLiked) {
+      bachelorProvider.listOfLikedBachelors.add(bachelor);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "You liked ${bachelor.firstName}'s profile!",
+            style: TextStyle(
+              fontFamily: "Poppins",
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.red.shade600,
+        ),
+      );
+    } else {
+      bachelorProvider.listOfLikedBachelors.remove(bachelor);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    bachelorProvider = Provider.of<BachelorProvider>(context);
+    textScaleFactor = MediaQuery.of(context).textScaleFactor;
+    fontSize = 16 * textScaleFactor;
+
     Widget buildBachelorsListView() {
       return Consumer<BachelorProvider>(
         builder: (context, bachelorProvider, _) {
           final bachelors = bachelorProvider.bachelors;
-
           return ListView.builder(
             itemCount: bachelors.length,
             itemBuilder: (BuildContext context, int index) {
-              Bachelor bachelor = bachelors[index];
+              final bachelor = bachelorProvider.getById(index);
               return ListTile(
                 leading: CircleAvatar(
                   backgroundImage: AssetImage(bachelor.avatar),
                 ),
                 title: Text(bachelor.firstName),
                 subtitle: Text(parseSearchingForToString(bachelor.searchFor)),
-                trailing:
-                    bachelorProvider.listOfLikedBachelors.contains(bachelor)
-                        ? const Icon(
-                            Icons.favorite,
-                            color: Colors.red,
-                          )
-                        : const Icon(Icons.heart_broken),
+                trailing: GestureDetector(
+                  child:
+                      bachelorProvider.listOfLikedBachelors.contains(bachelor)
+                          ? const Icon(
+                              Icons.favorite,
+                              color: Colors.red,
+                            )
+                          : const Opacity(
+                              opacity: 0.5, child: Icon(Icons.heart_broken)),
+                  onTap: () => _toggleLike(bachelor),
+                ),
                 visualDensity: const VisualDensity(horizontal: -2),
                 tileColor:
                     bachelorProvider.listOfLikedBachelors.contains(bachelor)
                         ? Colors.pink[200]
                         : Colors.white,
                 onTap: () {
-                  final selectedBachelor = bachelors[index];
-                  bachelorProvider.selectBachelor(selectedBachelor);
-                  GoRouter.of(context).go('/details/${selectedBachelor.id}');
+                  GoRouter.of(context).go('/details/$index');
                 },
               );
             },

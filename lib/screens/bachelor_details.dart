@@ -119,15 +119,12 @@ class BachelorDetailsState extends State<BachelorDetails> {
   @override
   Widget build(BuildContext context) {
     bachelorProvider = Provider.of<BachelorProvider>(context);
-    final bachelor = bachelorProvider.selectedBachelor;
+    int id = widget.id;
+    final bachelor = bachelorProvider.getById(id);
 
     screenWidth = MediaQuery.of(context).size.width;
     textScaleFactor = MediaQuery.of(context).textScaleFactor;
     fontSize = 16 * textScaleFactor;
-
-    if (bachelor == null) {
-      return Container();
-    }
 
     return Scaffold(
       appBar: AppBar(

@@ -4,18 +4,10 @@ import 'package:finder/models/bachelor.dart';
 class BachelorProvider extends ChangeNotifier {
   List<Bachelor> _listOfLikedBachelors = [];
   List<Bachelor> _bachelors = [];
-  Bachelor? _selectedBachelor;
-
-  Bachelor? get selectedBachelor => _selectedBachelor;
 
   List<Bachelor> get listOfLikedBachelors => _listOfLikedBachelors;
 
   List<Bachelor> get bachelors => _bachelors;
-
-  void selectBachelor(Bachelor bachelor) {
-    _selectedBachelor = bachelor;
-    notifyListeners();
-  }
 
   void applyLike(Bachelor bachelor) {
     bachelor.isLiked = !bachelor.isLiked;
@@ -46,9 +38,7 @@ class BachelorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // TODO : access bachelor through id
-  // Bachelor? read(int id) {
-  //   return _bachelors.firstWhere((element) => element.id == id,
-  //       orElse: () => null);
-  // }
+  Bachelor getById(int id) {
+    return _bachelors.firstWhere((element) => element.id == id);
+  }
 }
