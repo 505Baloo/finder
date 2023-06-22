@@ -1,16 +1,15 @@
 # finder
 
-A new Flutter project.
+## Goals
 
-## Getting Started
+Finder's goal is essentially to "mimic" an infamous dating app. This was our first introduction to Provider pattern. It has a main page which is essentially a list of tiles that you can click on. Clicking a tile redirects you to a Details page from where you can like a "Bachelor" whom you can retrieve in a "Liked" list upon clicking a button on the main page.
 
-This project is a starting point for a Flutter application.
+## Infos
 
-A few resources to get you started if this is your first Flutter project:
+Author : Jordan Cheniclet
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+This project was done during Mr [Alexandre Leroux](https://www.linkedin.com/in/alexandre-leroux-sherpa/)'s class.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Resources
+
+[FlutterDoc](https://docs.flutter.dev/)
